@@ -1,0 +1,112 @@
+{% extends './wrapper.html' %}
+
+{% block content %}
+
+<div class="ak-grid-row">
+    <div class="ak-grid-col ak-grid-col-12-of-12">
+        <h2 class="ak-display-inline-block">{{ actionkit_user.name }}</h2> 
+        &nbsp; <a href="/logout/">Log Out</a>
+    </div>
+</div>
+
+<div class="ak-grid-row">
+    <div class="ak-grid-col ak-grid-col-12-of-12">
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li>
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        <h3>Email And Address</h3>
+        <div><strong>{{ actionkit_user.email }}</strong></div>
+
+        <div class="ak-full-address">{{ actionkit_user.full_address }}</div>
+
+        <div><a href="update/">Update your email or address.</a></div>
+
+        {% record '{"id": "' in user_dict %}
+        {% record actionkit_user.id in user_dict %}
+        {% record '"}' in user_dict %}
+        {% with user_dict|join:""|load_json as user_dict %}
+        {% withevents with "action" as campaign user_dict as host %}
+        {% if events %}
+        <h3>Events You're Hosting</h3>
+        <ul class="ak-margin-none">
+        {% for event in events %}
+          <li><a href="/event/action/{{ event.id }}/host">{{ event.title }} ({% if event.obj.is_in_past %}occurred on {{ event.starts_at_full }}{% else %}{{ event.starts_at }}{% endif %})</a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <form method="GET" action="https://go.peoplepower.org/event/action/create">
+          <input type="hidden" name="source" value="akuserdash">
+          <input type="submit" class="ak-submit-button" value="Create a People Power action event!">
+        </form>
+        {% endif %}
+        {% endwithevents %}
+
+        {% withevents with "launch" as campaign user_dict as host %}
+        {% if events %}
+        <h3>Your Resistance Training livestream</h3>
+        <ul class="ak-margin-none">
+        {% for event in events %}
+          <li><a href="/event/launch/{{ event.id }}/host">{{ event.title }} ({% if event.obj.is_in_past %}occurred on {{ event.starts_at_full }}{% else %}{{ event.starts_at }}{% endif %})</a></li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwithevents %}
+        {% endwith %}
+        
+        <h3> Subscription History </h3>
+
+        <ul class="ak-margin-none">
+            {% for subscription in actionkit_user.subscription_history %}
+            <li>
+                {{ subscription.list.name }}, {{ subscription.change.name }}, at {{ subscription.created_at|date:"m/d/Y" }}
+            </li>
+            {% endfor %}
+        </ul>
+
+        {% if actionkit_user.is_subscribed %}
+        <div><a href="/cms/unsubscribe/unsubscribe/?akid={{ actionkit_user.token }}">Unsubscribe</a></div>
+        {% endif %}
+
+        {% if recurring_donations %}
+        <h3> Your Recurring Donations </h3>
+        <ul class="ak-margin-none">
+            {% for profile in recurring_donations %}
+            <li>
+                <strong>{{ profile.amt }}</strong> a {{ profile.inverse_period_display|lower }}, started on {{ profile.created_at|date:"m/d/Y" }}. 
+                You've given a total of {{ profile.payment_total_amt }}. 
+                {% if profile.is_active %}
+                    {% if profile.order.payment_method != "paypal" %}
+                        <a href="/cms/pledge/update/update/">Update your credit card</a> or <a href="/cms/pledge/cancel/monthly/">cancel at any time.</a>
+                    {% else %}
+                        <a href="/cms/pledge/cancel/monthly/">Cancel at any time.</a>
+                    {% endif %} 
+                {% else %}
+                    <b>{{ profile.get_status_display }} on {{ profile.updated_at|date:"m/d/Y" }} </b>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if donations %}
+            <h3> Donation History </h3>
+            <ul>
+                {% for donation in donations %}
+                    <li>
+                        {{ donation.amt }} on {{ donation.created_at|date:"m/d/Y" }}  {% if donation.recurring %} (Recurring) {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

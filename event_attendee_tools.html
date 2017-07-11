@@ -1,0 +1,98 @@
+{% extends "./wrapper.html" %}{% load actionkit_tags %}
+
+{% block content %}
+{% if signup and not event.is_inactive %}
+<img class="conversion" alt="" width="0" height="0" src="https://ms.clicks.actions.aclu.org/conversion?version=1&conversion_items=1&conversion_value=0">
+<!-- Title -->
+<!-- Sidebar -->
+<script>
+function scrollToAnchor(aid){
+    var aTag = $("a[name='"+ aid +"']");
+    $('html,body').animate({scrollTop: aTag.offset().top},'slow');
+}
+</script>
+<div class="banding-black">
+<div class="ak-grid-row">
+<div class="ak-grid-col ak-grid-col-12-of-12">
+{% if campaign.use_title %}
+<h2>Event: {{ event.title }}</h2>
+{% else %}
+<h2>Event: {{ campaign.local_title }}</h2>
+{% endif %}
+{% if campaign.use_title %}
+<h3>{{ campaign.local_title }}</h3>
+{% endif %}
+<!-- Message from mothership -->
+<div id="attendee-tools-intro">{{ form.tools_text|safe }}</div>
+</div> <!--col-12-->
+</div> <!--ak-grid-row-->
+</div> <!-- .banding-black -->
+
+<div class="ak-grid-row event-rsvpthanks">
+<div class="ak-grid-col ak-grid-col-12-of-12 textA textBlue">You are confirmed for this event.</div>
+</div> <!-- .event-rsvpthanks -->
+
+<div class="ak-grid-row">
+
+<div class="ak-grid-col ak-grid-col-6-of-12">
+	<div id="event-attendee-details">
+	<div class="subA">Event Details</div>
+	{% include "./event_attendee_details.html" %}
+	</div>
+	<div class="event-tools">
+	<div class="subA">Event tools</div>
+	<div id="event-attendee-links">
+	{{ form.tools_sidebar|safe }}
+	<span><a href="../cancel_signup/?akid={{ args.akid }}" class="buttonB1 icon-cancel">Cancel signup</a></span>
+	<span><a href="#emailspot" onclick="$('div.contact-form').slideDown('slow'); $(this).parent('li.narrower').hide();scrollToAnchor('emailspot');" class="buttonB1 icon-email">Email host</a></span>
+	</div>
+	{% include "./event_contact.html" %}
+	</div> <!-- .event-tools -->
+</div> <!-- col6 -->
+
+<div class="ak-grid-col ak-grid-col-6-of-12">
+	<div class="event-attendee-sidebar">
+	    {% if event.is_open_for_signup %}
+	        {% include "./event_invite.html" %}
+	    {% endif %}
+	</div>
+	<div class="event-share">
+		<div class="subA">Share</div>
+    
+    <div class="thanks-share-fb"><a class="buttonA3 icon-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://go.peoplepower.org/event/{{ campaign.local_name }}/{{event.id}}/signup/?source=fbshare" target="_blank"><span class="box"><span class="icon"></span>Post to Facebook</a></span></div>
+<div class="thanks-share-twitter"><a class="buttonA3 icon-twitter" href="https://twitter.com/home?status=Join%20me%20for%20an%20%40ACLU%20People%20Power%20Action%20Event%20in%20{{ event.city_etc_no_postal }}%20https%3A//go.peoplepower.org/event/{{campaign.local_name}}/{{event.id}}/signup/?source=twshare" target="_blank"><span class="box"><span class="icon"></span>Share on Twitter</a></span></div>
+    
+	
+	</div> <!-- .event-share -->
+</div> <!-- col6 -->
+
+</div> <!-- .ak-grid-row -->
+
+{% else %}
+    {% if event.is_inactive %}
+        <h2>Sorry, this event has been cancelled.</h2>
+    {% endif %}
+    {% if not signup %}
+        {% comment %}
+            This message also shows if you were removed by the host.
+        {% endcomment %}
+        {% if args.cancel_success %}
+            <h2>Your signup was cancelled successfully.</h2>
+        {% else %}
+            <h2>You aren't currently signed up for this event.</h2>
+            <p>If you think this is a mistake, check that you cut-and-pasted the entire link to this page.</p>
+        {% endif %}
+    {% endif %}
+    <div>
+        <a href="/event/{{ campaign.local_name }}/?akid={{args.akid}}&amp;zip={{args.zip}}">Search for another event</a>
+    </div>
+{% endif %}
+
+{% endblock %}
+
+{% block below_form %}
+<script type="text/javascript">
+actionkit.forms.contextRoot = '/context/';
+actionkit.forms.initTafForm('taf');
+</script>
+{% endblock %}
