@@ -24,17 +24,17 @@
 
             <ul class="compact" id="ak-errors"></ul>
             <div id="unknown_user">
-                <div> 
+                <div>
                     <div>
                         <label for="id_email">Email address</label>
                         <input id="id_email" type="text" name="email" size=40>
                     </div>
-                    <input type="hidden" name="country" value="United States">
+                    <input type="hidden" name="country" value="United Kingdom">
                 </div>
             </div>
             <div id="known_user">
                 <div class="ak-err">
-                    Not <span id="known_user_name"></span>?  
+                    Not <span id="known_user_name"></span>?
                     Please don't use this form!
                 </div>
             </div>
@@ -44,7 +44,7 @@
                 <div>
                     <label>
                         Unsubscribe From
-                    </label>                    
+                    </label>
                     <div class="ak-unsubscribe-lists ak-checkbox-set">
                         {% for s in user.subscriptions %}
                             <label class="ak-checkbox-choice" style="display: block">
@@ -69,7 +69,7 @@
 
         </div>
     </div>
-    
+
     <input type="hidden" name="page" value="{{ page.name }}">
 </form>
 

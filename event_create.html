@@ -276,7 +276,7 @@
     isEventUnitedStates = function () {
         var country = actionkit.form && actionkit.form.event_country
         && actionkit.utils.val(actionkit.form.event_country)
-        return country == 'United States' || country == 'US' || !country;
+        return country == 'United States' || country == 'US';
     };
 
     reflectEventCountryChange = function() {

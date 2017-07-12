@@ -291,7 +291,7 @@
                         </div>
 
                         {% else %}
-                            <input type="hidden" name="country" value="United States">
+                            <input type="hidden" name="country" value="United Kingdom">
                         {% endif %}
                     </div> <!-- labels overlaid (billing address) -->
 
@@ -823,7 +823,7 @@
             actionkit.forms.onValidationErrors(actionkit.errors);
             step_has_errors = true;
         }
-        
+
         if (!valid_credit_card_code($('#ak-card_code').val())) {
             if (!actionkit.errors)
                 actionkit.errors = {};
@@ -845,7 +845,7 @@
             step_has_errors = true;
         }
         return step_has_errors;
-    }  
+    }
 
     function step_1_validation() {
         var step_has_errors = false;
@@ -865,7 +865,7 @@
                 if ($(this).val() != "")
                     selected_candidates = true;
             });
-        
+
         // there's no built-in validation for amounts, so do it here
         if (!selected_products && !selected_candidates &&
             !$('.ak-amount-radio-button').is(':checked') &&
@@ -875,7 +875,7 @@
             actionkit.errors['amount:missing'] = actionkit.forms.errorMessage('amount:missing');
             actionkit.forms.onValidationErrors(actionkit.errors);
             step_has_errors = true;
-            
+
         } else if (($('#ak-other-amount-field').val() != "" &&
                     $('#ak-other-amount-field').val() != undefined)  &&
                    !/^\d*(\.\d{1,2})?$/.test($('#ak-other-amount-field').val())) {
@@ -885,7 +885,7 @@
             actionkit.forms.onValidationErrors(actionkit.errors);
             step_has_errors = true;
         }
-        
+
         {% if page.minimum_amount %}
         var total = update_total();
         if (!step_has_errors && total < {{ page.minimum_amount }}) {
@@ -1108,7 +1108,7 @@
             }
         }
 
-        
+
         /* not doing 3-step, so we need to do all the validation here,
          * don't want to short-circuit and only run one step, better
          * to run all three even if all three have errors */

@@ -6,7 +6,7 @@
             <option value="{{ std_name|escapeall }}">{{ name|escapeall }}</option>
         {% endfor %}
     {% else %}
-        <option selected value="United States">United States</option>
+        <option selected value="United Kingdom">United Kingdom</option>
         {% for std_name,name in page.lang_or_en.country_names %}
             <option value="{{ std_name|escapeall }}">{{ name|escapeall }}</option>
         {% endfor %}
